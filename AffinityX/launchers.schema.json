@@ -1,0 +1,208 @@
+{
+  "$id": "launchers.schema.json",
+  "title": "AffinityX Game Library — Launchers",
+  "description": "Defines the structure of the launchers.json data file used by AffinityX.GameLibrary.",
+  "type": "object",
+  "required": [ "schemaVersion", "generatedAtUtc", "launchers" ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "URI reference to the JSON Schema used to validate this file."
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "description": "Version of this schema.",
+      "minimum": 1
+    },
+    "generatedAtUtc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "UTC timestamp indicating when this file was generated."
+    },
+    "launchers": {
+      "type": "array",
+      "description": "Collection of game launcher definitions.",
+      "minItems": 0,
+      "items": { "$ref": "#/$defs/launcher" }
+    }
+  },
+
+  "$defs": {
+
+    "launcher": {
+      "type": "object",
+      "description": "Describes a single game launcher and how to detect it.",
+      "required": [ "id", "displayName", "platforms", "executableName", "isDeprecated", "installLocators", "libraryLocators", "manifest" ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the launcher (e.g., 'steam')."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Human-readable name of the launcher."
+        },
+        "platforms": {
+          "type": "array",
+          "description": "Platforms this launcher supports.",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [ "Windows", "Linux", "macOS" ]
+          }
+        },
+        "executableName": {
+          "type": "string",
+          "description": "Name of the launcher's main executable file."
+        },
+        "isDeprecated": {
+          "type": "boolean",
+          "description": "Whether this launcher definition is deprecated."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional human-readable notes about detection strategy."
+        },
+        "installLocators": {
+          "type": "array",
+          "description": "Ordered strategies used to locate the launcher installation directory.",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/installLocator" }
+        },
+        "libraryLocators": {
+          "type": "array",
+          "description": "Strategies used to discover game library folders.",
+          "items": { "$ref": "#/$defs/libraryLocator" }
+        },
+        "manifest": {
+          "$ref": "#/$defs/manifest",
+          "description": "Describes how to locate and parse individual game manifest files."
+        }
+      }
+    },
+
+    "installLocator": {
+      "description": "A strategy for locating the launcher's installation directory.",
+      "oneOf": [
+        { "$ref": "#/$defs/registryLocator" },
+        { "$ref": "#/$defs/environmentPathLocator" },
+        { "$ref": "#/$defs/absolutePathLocator" }
+      ]
+    },
+
+    "registryLocator": {
+      "type": "object",
+      "description": "Locates the launcher via a Windows registry key.",
+      "required": [ "type", "hive", "view", "subKey", "valueName" ],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "registry" },
+        "hive": {
+          "type": "string",
+          "description": "The registry hive to search.",
+          "enum": [ "ClassesRoot", "CurrentUser", "LocalMachine", "Users", "CurrentConfig" ]
+        },
+        "view": {
+          "type": "string",
+          "description": "The registry bit-view to use.",
+          "enum": [ "Default", "Registry32", "Registry64" ]
+        },
+        "subKey": {
+          "type": "string",
+          "description": "The registry sub-key path containing the install value."
+        },
+        "valueName": {
+          "type": "string",
+          "description": "The registry value name whose data is the install path."
+        }
+      }
+    },
+
+    "environmentPathLocator": {
+      "type": "object",
+      "description": "Locates the launcher relative to a known special/environment folder.",
+      "required": [ "type", "specialFolder", "pathSegments" ],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "environmentPath" },
+        "specialFolder": {
+          "type": "string",
+          "description": "A System.Environment.SpecialFolder name (e.g., 'ProgramFilesX86')."
+        },
+        "pathSegments": {
+          "type": "array",
+          "description": "Path segments appended to the special folder root.",
+          "minItems": 1,
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "absolutePathLocator": {
+      "type": "object",
+      "description": "Locates the launcher at a well-known fixed absolute path.",
+      "required": [ "type", "path" ],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "absolutePath" },
+        "path": {
+          "type": "string",
+          "description": "The absolute file system path to the launcher installation directory."
+        }
+      }
+    },
+
+    "libraryLocator": {
+      "description": "A strategy for locating a launcher's game library folders.",
+      "oneOf": [
+        { "$ref": "#/$defs/steamLibraryVdfLocator" }
+      ]
+    },
+
+    "steamLibraryVdfLocator": {
+      "type": "object",
+      "description": "Discovers Steam library folders by parsing a libraryfolders.vdf file.",
+      "required": [ "type", "pathSegments" ],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "steamLibraryVdf" },
+        "pathSegments": {
+          "type": "array",
+          "description": "Path segments relative to the launcher install directory pointing to the VDF file.",
+          "minItems": 1,
+          "items": { "type": "string" }
+        }
+      }
+    },
+
+    "manifest": {
+      "description": "Describes how to locate and parse individual game manifest files.",
+      "oneOf": [
+        { "$ref": "#/$defs/steamAcfManifest" }
+      ]
+    },
+
+    "steamAcfManifest": {
+      "type": "object",
+      "description": "Locates Steam game manifests using ACF files within a library folder.",
+      "required": [ "type", "pathSegments", "filePattern" ],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "steamAcf" },
+        "pathSegments": {
+          "type": "array",
+          "description": "Path segments relative to a library folder where ACF manifest files reside.",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "filePattern": {
+          "type": "string",
+          "description": "Glob pattern used to match manifest files (e.g., 'appmanifest_*.acf')."
+        }
+      }
+    }
+
+  }
+}
