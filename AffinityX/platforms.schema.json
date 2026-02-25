@@ -1,9 +1,9 @@
 {
-  "$id": "launchers.schema.json",
-  "title": "AffinityX Game Library — Launchers",
-  "description": "Defines the structure of the launchers.json data file used by AffinityX.GameLibrary.",
+  "$id": "platforms.schema.json",
+  "title": "AffinityX Game Library — Platforms",
+  "description": "Defines the structure of the platforms.json data file used by AffinityX.GameLibrary.",
   "type": "object",
-  "required": [ "schemaVersion", "generatedAtUtc", "launchers" ],
+  "required": [ "schemaVersion", "generatedAtUtc", "platforms" ],
   "additionalProperties": false,
   "properties": {
     "$schema": {
