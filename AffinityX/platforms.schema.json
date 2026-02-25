@@ -95,10 +95,10 @@
     "registryLocator": {
       "type": "object",
       "description": "Locates the launcher via a Windows registry key.",
-      "required": [ "type", "hive", "view", "subKey", "valueName" ],
+      "required": [ "$type", "hive", "view", "subKey", "valueName" ],
       "additionalProperties": false,
       "properties": {
-        "type": { "const": "registry" },
+        "$type": { "const": "registry" },
         "hive": {
           "type": "string",
           "description": "The registry hive to search.",
@@ -123,10 +123,10 @@
     "environmentPathLocator": {
       "type": "object",
       "description": "Locates the launcher relative to a known special/environment folder.",
-      "required": [ "type", "specialFolder", "pathSegments" ],
+      "required": [ "$type", "specialFolder", "pathSegments" ],
       "additionalProperties": false,
       "properties": {
-        "type": { "const": "environmentPath" },
+        "$type": { "const": "environmentPath" },
         "specialFolder": {
           "type": "string",
           "description": "A System.Environment.SpecialFolder name (e.g., 'ProgramFilesX86')."
@@ -143,10 +143,10 @@
     "absolutePathLocator": {
       "type": "object",
       "description": "Locates the launcher at a well-known fixed absolute path.",
-      "required": [ "type", "path" ],
+      "required": [ "$type", "path" ],
       "additionalProperties": false,
       "properties": {
-        "type": { "const": "absolutePath" },
+        "$type": { "const": "absolutePath" },
         "path": {
           "type": "string",
           "description": "The absolute file system path to the launcher installation directory."
@@ -164,10 +164,10 @@
     "steamLibraryVdfLocator": {
       "type": "object",
       "description": "Discovers Steam library folders by parsing a libraryfolders.vdf file.",
-      "required": [ "type", "pathSegments" ],
+      "required": [ "$type", "pathSegments" ],
       "additionalProperties": false,
       "properties": {
-        "type": { "const": "steamLibraryVdf" },
+        "$type": { "const": "steamLibraryVdf" },
         "pathSegments": {
           "type": "array",
           "description": "Path segments relative to the launcher install directory pointing to the VDF file.",
@@ -187,10 +187,10 @@
     "steamAcfManifest": {
       "type": "object",
       "description": "Locates Steam game manifests using ACF files within a library folder.",
-      "required": [ "type", "pathSegments", "filePattern" ],
+      "required": [ "$type", "pathSegments", "filePattern" ],
       "additionalProperties": false,
       "properties": {
-        "type": { "const": "steamAcf" },
+        "$type": { "const": "steamAcf" },
         "pathSegments": {
           "type": "array",
           "description": "Path segments relative to a library folder where ACF manifest files reside.",
