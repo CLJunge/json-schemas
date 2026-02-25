@@ -20,33 +20,33 @@
       "format": "date-time",
       "description": "UTC timestamp indicating when this file was generated."
     },
-    "launchers": {
+    "platforms": {
       "type": "array",
-      "description": "Collection of game launcher definitions.",
+      "description": "Collection of game platform definitions.",
       "minItems": 0,
-      "items": { "$ref": "#/$defs/launcher" }
+      "items": { "$ref": "#/$defs/platform" }
     }
   },
 
   "$defs": {
 
-    "launcher": {
+    "platform": {
       "type": "object",
-      "description": "Describes a single game launcher and how to detect it.",
-      "required": [ "id", "displayName", "platforms", "executableName", "isDeprecated", "installLocators", "libraryLocators", "manifest" ],
+      "description": "Describes a single game platform and how to detect it.",
+      "required": [ "id", "displayName", "supportedOperatingSystems", "executableName", "isDeprecated", "installLocators", "libraryLocators", "manifest" ],
       "additionalProperties": false,
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the launcher (e.g., 'steam')."
+          "description": "Unique identifier for the platform (e.g., 'steam')."
         },
         "displayName": {
           "type": "string",
-          "description": "Human-readable name of the launcher."
+          "description": "Human-readable name of the platform."
         },
-        "platforms": {
+        "supportedOperatingSystems": {
           "type": "array",
-          "description": "Platforms this launcher supports.",
+          "description": "Operating systems this platform supports.",
           "minItems": 1,
           "items": {
             "type": "string",
@@ -55,11 +55,11 @@
         },
         "executableName": {
           "type": "string",
-          "description": "Name of the launcher's main executable file."
+          "description": "Name of the platform's main executable file."
         },
         "isDeprecated": {
           "type": "boolean",
-          "description": "Whether this launcher definition is deprecated."
+          "description": "Whether this platform definition is deprecated."
         },
         "notes": {
           "type": "string",
@@ -67,7 +67,7 @@
         },
         "installLocators": {
           "type": "array",
-          "description": "Ordered strategies used to locate the launcher installation directory.",
+          "description": "Ordered strategies used to locate the platform installation directory.",
           "minItems": 1,
           "items": { "$ref": "#/$defs/installLocator" }
         },
