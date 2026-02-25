@@ -3,16 +3,16 @@
   "title": "AffinityX Game Library — Platforms",
   "description": "Defines the structure of the platforms.json data file used by AffinityX.GameLibrary.",
   "type": "object",
-  "required": [ "schemaVersion", "generatedAtUtc", "platforms" ],
+  "required": [ "version", "generatedAtUtc", "platforms" ],
   "additionalProperties": false,
   "properties": {
     "$schema": {
       "type": "string",
       "description": "URI reference to the JSON Schema used to validate this file."
     },
-    "schemaVersion": {
+    "version": {
       "type": "integer",
-      "description": "Version of this schema.",
+      "description": "Version of this definitions file",
       "minimum": 1
     },
     "generatedAtUtc": {
